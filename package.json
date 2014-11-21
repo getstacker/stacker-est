@@ -1,0 +1,35 @@
+{
+  "name": "stacker-est",
+  "version": "0.1.0",
+  "description": "Embedded CoffeeScript templates for Stacker.",
+  "main": "index.js",
+  "engines": {
+    "node": ">= 0.11.14"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/getstacker/stacker-est.git"
+  },
+  "keywords": [
+    "stacker",
+    "plugin"
+  ],
+  "author": "Joe Johnston <joe@simple10.com> (http://www.simple10.com/)",
+  "license": "Apache 2.0",
+  "bugs": {
+    "url": "https://github.com/getstacker/stacker-est/issues"
+  },
+  "homepage": "https://github.com/getstacker/stacker-est",
+  "dependencies": {
+    "coffee-script": "^1.8"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "sinon": "^1.11.1",
+    "sinon-chai": "^2.6.0",
+    "chai-as-promised": "^4.1.1"
+  }
+}
