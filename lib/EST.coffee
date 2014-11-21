@@ -1,8 +1,4 @@
 # EST: Embedded Stacker Template
-# Based on ECT v0.5.9 with the following mods:
-# removed AMD
-# removed browser
-# removed compiler method (zlib)
 # removed watch option; this should be handled by another library that calls ect
 
 ###!
