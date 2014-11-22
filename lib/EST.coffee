@@ -23,7 +23,7 @@ class EST
   options:
     open: '<%'
     close: '%>'
-    ext: ''
+    ext: '.est'
     cache: true
     root: ''
 
