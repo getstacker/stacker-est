@@ -1,0 +1,4 @@
+Some text.
+
+<% p = 'pong' %>
+ping: <%= "pong #{p}" %>

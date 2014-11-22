@@ -1,0 +1,20 @@
+Some text.
+
+<%
+  # Multiline with comments and indendation
+  a = 'a'
+  b = 'b'
+  # Another comment
+  c = "#{a}#{b}"
+  # Another comment
+%>
+
+c :: <%= c %>
+
+<%
+# Without indendation
+e = 'e'
+f = 'f'
+%>
+
+<%= e %> -> <%= f %>
