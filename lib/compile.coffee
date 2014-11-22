@@ -28,23 +28,22 @@ compile = (template, options) ->
   j = undefined
   i = 0
 
-  while i < matches.length
-    text = matches[i]
-    command = ""
+  for text, i in matches
+    command = ''
     if i % 2 is 1
-      switch text.charAt(0)
       line = "__estFileInfo.line = " + lineNo
+      switch text.charAt 0
         when "="
           prefix = "' + (" + line + "\n'') + __estTemplateContext.escape("
           postfix = ") + '"
           newline = ""
-          text = text.substr(1)
+          text = text.substr 1
           output = "escaped"
         when "-"
           prefix = "' + (" + line + "\n'') + (("
           postfix = ") ? '') + '"
           newline = ""
-          text = text.substr(1)
+          text = text.substr 1
           output = "unescaped"
         else
           prefix = "'\n" + line
@@ -54,7 +53,7 @@ compile = (template, options) ->
       text = text.replace(esc.trim, "")
       command = text.split(/[^a-z]+/)[0]
       if indentChar = indentChars[text.charAt(text.length - 1)]
-        text = text.replace(/:$/, "").replace(esc.trim, "")
+        text = text.replace(/:$/, '').replace esc.trim, ''
         if indentChar is ">"
           if /[$a-z_][0-9a-z_$]*[^=]+(-|=)>/i.test(text.replace(/'.*'|".*"/, ""))
             indentStack.push "capture_output_" + output
@@ -162,14 +161,14 @@ compile = (template, options) ->
           if command is "extend"
             text = "__estExtended = true\n__estParent = #{text.replace /extend\s+/, ''}"
           if /\n/.test(text)
-            lines = text.split(/\n/)
-            buffer += prefix.replace(esc.newline, "\n" + indentation)
-            j = 0
-            while j < lines.length
-              continue  if /^\s*$/.test(lines[j])
-              baseIndent = new RegExp("^" + lines[j].substr(0, lines[j].search(/[^\s]/)))  if typeof baseIndent is "undefined"
-              buffer += ((if newline.length then newline + indentation else "")) + lines[j].replace(baseIndent, "")
-              j++
+            lines = text.split /\n/
+            buffer += prefix.replace(esc.newline, "\n#{indentation}")
+            for line in lines
+              continue  if /^\s*$/.test line
+              if typeof baseIndent is 'undefined'
+                baseIndent = new RegExp '^' + line.substr(0, line.search /[^\s]/)
+              buffer += newline + indentation  if newline.length
+              buffer += line.replace baseIndent, ''
             lines = undefined
             baseIndent = undefined
           else
@@ -178,10 +177,9 @@ compile = (template, options) ->
             indentation += "  "
             indent = false
           buffer += postfix.replace(esc.newline, "\n" + indentation)
-    else
-      buffer += text.replace(/[\\']/g, "\\$&").replace(/\r/g, "").replace(esc.newline, "\\n").replace(/^\\n/, "")  if indentStack[indentStackPointer] isnt "switch"
+    else if indentStack[indentStackPointer] isnt "switch"
+      buffer += text.replace(/[\\']/g, "\\$&").replace(/\r/g, "").replace(esc.newline, "\\n").replace(/^\\n/, "")
     lineNo += text.split(esc.newline).length - 1
-    i++
   buffer += "'\nif not __estExtended\n  return __estOutput\nelse\n  __estContainer = __estTemplateContext.load __estParent\n  __estFileInfo.file = __estContainer.file\n  __estFileInfo.line = 1\n  __estTemplateContext.childContent = __estOutput\n  return __estContainer.compiled.call(this, __estTemplateContext, __estFileInfo, include, content, block)"
   buffer = "__estExtended = false\n#{buffer}"
   eval "(function __estTemplate(__estTemplateContext, __estFileInfo, include, content, block) {\n" + CoffeeScript.compile(buffer,

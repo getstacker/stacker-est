@@ -1,23 +1,21 @@
 fs = require 'fs'
 path = require 'path'
 esc = require './escape'
+compile = require './compile'
 
 
 read = (file, options) ->
-  if Object::toString.call(options.root) is "[object Object]"
-    data = file.split(".").reduce((currentContext, key) ->
+  if Object::toString.call(options.root) is '[object Object]'
+    contents = file.split('.').reduce (currentContext, key) ->
       currentContext[key]
-    , options.root)
-    if Object::toString.call(data) is "[object String]"
-      data
-    else
-      throw new Error("Failed to load template " + file)
+    , options.root
+    return contents  if Object::toString.call(contents) is '[object String]'
+    throw new Error "Failed to load template #{file}"
   else
     try
-      return fs.readFileSync(file, "utf8")
+      fs.readFileSync file, 'utf8'
     catch e
-      throw new Error("Failed to load template " + file)
-  return
+      throw new Error "Failed to load template #{file}"
 
 
 
@@ -49,10 +47,6 @@ class TemplateContext
       @childContent
 
   load: (template) ->
-    file = undefined
-    compiled = undefined
-    container = undefined
-    data = undefined
     if @options.cache and @cache[template]
       @cache[template]
     else
@@ -64,16 +58,16 @@ class TemplateContext
           file = path.normalize(((if @options.root.length and template.charAt(0) isnt "/" then (@options.root + "/") else "")) + template.replace(extExp, "") + @options.ext)
       else
         file = template
-      data = read file, @options
-      if data.substr(0, 24) is "(function __ectTemplate("
+      contents = read file, @options
+      if contents.substr(0, 24) is "(function __estTemplate("
         try
-          compiled = eval(data)
+          compiled = eval contents
         catch e
-          e.message = e.message + " in " + file
+          e.message = "#{e.message} in #{file}"
           throw e
       else
         try
-          compiled = compile(data)
+          compiled = compile contents, @options
         catch e
           e.message = e.message.replace(RegExp(" on line \\d+"), "") + " in " + file
           throw e
