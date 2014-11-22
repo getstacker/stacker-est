@@ -7,7 +7,7 @@ indentChars =
 
 compile = (template, options) ->
   lineNo = 1
-  bufferStack = ["__ectOutput"]
+  bufferStack = ["__estOutput"]
   bufferStackPointer = 0
   buffer = bufferStack[bufferStackPointer] + " = '"
   matches = template.split(new RegExp(esc.regExp(options.open) + "((?:.|[\r\n])+?)(?:" + esc.regExp(options.close) + "|$)"))
@@ -32,10 +32,10 @@ compile = (template, options) ->
     text = matches[i]
     command = ""
     if i % 2 is 1
-      line = "__ectFileInfo.line = " + lineNo
       switch text.charAt(0)
+      line = "__estFileInfo.line = " + lineNo
         when "="
-          prefix = "' + (" + line + "\n'') + __ectTemplateContext.escape("
+          prefix = "' + (" + line + "\n'') + __estTemplateContext.escape("
           postfix = ") + '"
           newline = ""
           text = text.substr(1)
@@ -59,7 +59,7 @@ compile = (template, options) ->
           if /[$a-z_][0-9a-z_$]*[^=]+(-|=)>/i.test(text.replace(/'.*'|".*"/, ""))
             indentStack.push "capture_output_" + output
             indentStackPointer++
-          bufferStack.push "__ectFunction" + bufferStackPointer
+          bufferStack.push "__estFunction" + bufferStackPointer
           bufferStackPointer++
           postfix = "\n" + bufferStack[bufferStackPointer] + " = '"
           command = "function"
@@ -73,7 +73,7 @@ compile = (template, options) ->
             postfix = ") + '"
           buffer += prefix.replace(esc.newline, "\n" + indentation) + text + postfix.replace(esc.newline, "\n" + indentation)
         when "block"
-          bufferStack.push "__ectTemplateContext.blocks['" + text.replace(/block\s+('|")([^'"]+)('|").*/, "$2") + "']"
+          bufferStack.push "__estTemplateContext.blocks['" + text.replace(/block\s+('|")([^'"]+)('|").*/, "$2") + "']"
           bufferStackPointer++
           prefix = "'\n"
           postfix = "\n" + bufferStack[bufferStackPointer] + " += '"
@@ -182,9 +182,9 @@ compile = (template, options) ->
       buffer += text.replace(/[\\']/g, "\\$&").replace(/\r/g, "").replace(esc.newline, "\\n").replace(/^\\n/, "")  if indentStack[indentStackPointer] isnt "switch"
     lineNo += text.split(esc.newline).length - 1
     i++
-  buffer += "'\nif not __ectExtended\n  return __ectOutput\nelse\n  __ectContainer = __ectTemplateContext.load __ectParent\n  __ectFileInfo.file = __ectContainer.file\n  __ectFileInfo.line = 1\n  __ectTemplateContext.childContent = __ectOutput\n  return __ectContainer.compiled.call(this, __ectTemplateContext, __ectFileInfo, include, content, block)"
-  buffer = "__ectExtended = false\n" + buffer
-  eval "(function __ectTemplate(__ectTemplateContext, __ectFileInfo, include, content, block) {\n" + CoffeeScript.compile(buffer,
+  buffer += "'\nif not __estExtended\n  return __estOutput\nelse\n  __estContainer = __estTemplateContext.load __estParent\n  __estFileInfo.file = __estContainer.file\n  __estFileInfo.line = 1\n  __estTemplateContext.childContent = __estOutput\n  return __estContainer.compiled.call(this, __estTemplateContext, __estFileInfo, include, content, block)"
+  buffer = "__estExtended = false\n#{buffer}"
+  eval "(function __estTemplate(__estTemplateContext, __estFileInfo, include, content, block) {\n" + CoffeeScript.compile(buffer,
     bare: true
   ) + "});"
 
