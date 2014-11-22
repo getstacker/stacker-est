@@ -158,9 +158,9 @@ compile = (template, options) ->
             indentation += "  "
             indent = false
           buffer += postfix.replace(esc.newline, "\n" + indentation)
-        when "extend"
-          text = "__ectExtended = true\n__ectParent = " + text.replace(/extend\s+/, "")
         else
+          if command is "extend"
+            text = "__estExtended = true\n__estParent = #{text.replace /extend\s+/, ''}"
           if /\n/.test(text)
             lines = text.split(/\n/)
             buffer += prefix.replace(esc.newline, "\n" + indentation)
