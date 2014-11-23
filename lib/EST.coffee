@@ -32,6 +32,7 @@ class EST
 
   constructor: (options) ->
     @configure options
+    @clearCache()
 
 
   configure: (options = {}) ->
