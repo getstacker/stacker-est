@@ -20,7 +20,7 @@ TemplateContext = require './TemplateContext'
 
 class EST
   # Defaults
-  options:
+  defaults:
     open: '<%'
     close: '%>'
     ext: '.est'
@@ -28,6 +28,7 @@ class EST
     root: ''
 
   cache: {}
+  options: {}
 
 
   constructor: (options) ->
@@ -36,8 +37,11 @@ class EST
 
 
   configure: (options = {}) ->
-    for option of options
-      @options[option] = options[option]
+    @options = {}
+    for k,v of @defaults
+      @options[k] = v
+    for k,v of options
+      @options[k] = v
     @options
 
 
