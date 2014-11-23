@@ -17,6 +17,12 @@ describe 'EST', ->
       expect(contents).to.contain 'c :: ab'
       expect(contents).to.contain 'e -> f'
 
+    it 'yaml', ->
+      contents = @est.render 'yaml'
+      expect(contents).to.match /^val1: 123$/m
+      expect(contents).to.contain "obj:\n  nested:\n    val1: 123\n    val2: abc\n"
+      expect(contents).to.match /- 0\n\s{4}- 123\n\s{4}- abc\n\s{4}- 3\n/
+
     # Example from http://ectjs.com/ to ensure compatibility.
     # Uses page, layout, list, footer templates.
     it 'multiple templates', ->

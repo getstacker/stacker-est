@@ -1,0 +1,16 @@
+<%
+one = 123
+two = 'abc'
+%>
+
+val1: <%= one %>
+obj:
+  nested:
+    val1: <%= one %>
+    val2: <%= two %>
+  sequence:
+    - 0
+    - <%= one %>
+    - <%= two %>
+    - 3
+other: key

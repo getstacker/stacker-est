@@ -178,7 +178,9 @@ compile = (template, options) ->
             indent = false
           buffer += postfix.replace(esc.newline, "\n" + indentation)
     else if indentStack[indentStackPointer] isnt "switch"
-      buffer += text.replace(/[\\']/g, "\\$&").replace(/\r/g, "").replace(esc.newline, "\\n").replace(/^\\n/, "")
+      text = text.replace(/[\\']/g, "\\$&").replace(/\r/g, '').replace(esc.newline, "\\n")
+      # text = text.replace(/^\\n/, '')  # ECT behavior but breaks yaml; no idea why ECT needs this
+      buffer += text
     lineNo += text.split(esc.newline).length - 1
   buffer += "'\nif not __estExtended\n  return __estOutput\nelse\n  __estContainer = __estTemplateContext.load __estParent\n  __estFileInfo.file = __estContainer.file\n  __estFileInfo.line = 1\n  __estTemplateContext.childContent = __estOutput\n  return __estContainer.compiled.call(this, __estTemplateContext, __estFileInfo, include, content, block)"
   buffer = "__estExtended = false\n#{buffer}"
