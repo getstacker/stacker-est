@@ -5,7 +5,7 @@ path = require 'path'
 
 describe 'EST', ->
   before ->
-    @est = new EST root: path.join __dirname, '/mocks'
+    @est = new EST root: path.join __dirname, '/fixtures'
 
   describe '#render', ->
     it  'simple template', ->
