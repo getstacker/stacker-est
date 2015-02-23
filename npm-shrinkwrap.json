@@ -1,11 +1,4 @@
 {
   "name": "stacker-est",
-  "version": "0.2.4",
-  "dependencies": {
-    "coffee-script": {
-      "version": "1.9.1",
-      "from": "coffee-script@>=1.9.1 <2.0.0",
-      "resolved": "https://registry.npmjs.org/coffee-script/-/coffee-script-1.9.1.tgz"
-    }
-  }
+  "version": "0.2.5"
 }
