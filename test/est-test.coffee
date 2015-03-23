@@ -8,7 +8,7 @@ describe 'EST', ->
     @est = new EST root: path.join __dirname, '/fixtures'
 
   describe '#render', ->
-    it  'simple template', ->
+    it 'simple template', ->
       contents = @est.render 'simple'
       expect(contents).to.contain 'ping: pong pong'
 
@@ -20,6 +20,8 @@ describe 'EST', ->
     it 'yaml', ->
       contents = @est.render 'yaml'
       expect(contents).to.match /^val1: 123$/m
+      expect(contents).to.match /^\s+val3: 2$/m
+      expect(contents).to.match /^\s+val4: yo$/m
       expect(contents).to.contain "obj:\n  nested:\n    val1: 123\n    val2: abc\n"
       expect(contents).to.match /- 0\n\s{4}- 123\n\s{4}- abc\n\s{4}- 3\n/
 

@@ -1,6 +1,11 @@
 <%
 one = 123
 two = 'abc'
+obj =
+  a:
+    ab: 1
+    ac: 2
+  b: 'yo'
 %>
 
 val1: <%= one %>
@@ -8,6 +13,8 @@ obj:
   nested:
     val1: <%= one %>
     val2: <%= two %>
+    val3: <%= obj.a.ac %>
+    val4: <%= obj.b %>
   sequence:
     - 0
     - <%= one %>
