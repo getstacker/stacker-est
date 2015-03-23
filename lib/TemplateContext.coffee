@@ -58,7 +58,12 @@ class TemplateContext
           file = path.normalize(((if @options.root.length and template.charAt(0) isnt "/" then (@options.root + "/") else "")) + template.replace(extExp, "") + @options.ext)
       else
         file = template
-      contents = read file, @options
+      # Try the original file if it already contains an extension
+      if (path.basename template, @options.ext).split('.').length > 1
+        try
+          contents = read file.replace(///#{@options.ext}$///, ''), @options
+        catch e
+      contents = read file, @options  unless contents
       if contents.substr(0, 24) is "(function __estTemplate("
         try
           compiled = eval contents

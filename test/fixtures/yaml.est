@@ -21,3 +21,5 @@ obj:
     - <%= two %>
     - 3
 other: key
+
+<% include 'include.yaml' %>
